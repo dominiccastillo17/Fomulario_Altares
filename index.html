@@ -81,15 +81,39 @@
     <footer>Yo y mi casa serviremos a Jehová - Josué 24:15</footer>
   </div>
 
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyoASumPm9SV-YxOaqOROXVtbjBENIomo49ZsvOmMF5M6jRLKs4relPRY0CdL6L4rU/exec';
+ <script>
+    const apiUrl = 'https://api.airtable.com/v0/patLzVQDzlmI8QMo5/Formulario';  // Reemplaza con la URL de tu API de Airtable
+    const apiToken = 'patLzVQDzlmI8QMo5';  // Reemplaza con el token generado en el Centro de Desarrolladores de Airtable
+  
     const form = document.getElementById('formulario');
-
-    form.addEventListener('submit', e => {
+  
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then(response => alert('Formulario enviado correctamente'))
-        .catch(error => alert('Error al enviar el formulario'));
+  
+      const formData = new FormData(form);
+  
+      const data = {
+        fields: {
+          Familia: formData.get('familia'),
+          Fecha: formData.get('fecha'),
+          Adultos: parseInt(formData.get('adultos')),
+          Ninos: parseInt(formData.get('ninos')),
+          Ofrendas: formData.get('ofrendas'),
+          Oracion: formData.get('oracion')
+        }
+      };
+  
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': Bearer ${apiToken},
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => alert('Formulario enviado correctamente'))
+      .catch(error => alert('Error al enviar el formulario'));
     });
   </script>
 </body>
